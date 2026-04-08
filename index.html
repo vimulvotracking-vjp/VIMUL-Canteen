@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VIMUL Smart Canteen</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+text-align:center;
+padding:20px;
+margin:0;
+}
+
+.box{
+background:white;
+color:black;
+padding:25px;
+border-radius:15px;
+max-width:420px;
+margin:auto;
+box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+input{
+width:90%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+border:1px solid #ccc;
+font-size:16px;
+}
+
+button{
+width:100%;
+padding:15px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+font-size:18px;
+background:#28a745;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#1e7e34;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+margin:12px 0;
+}
+
+.qty{
+width:70px;
+text-align:center;
+}
+
+.success{
+font-size:22px;
+color:green;
+margin-top:15px;
+}
+
+.token{
+font-size:28px;
+color:red;
+margin-top:15px;
+font-weight:bold;
+}
+
+.footer{
+margin-top:40px;
+font-size:14px;
+opacity:0.7;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>VIMUL<br>Smart Canteen</h2>
+
+<!-- LOGIN -->
+
+<div class="box" id="loginBox">
+
+<h3>Employee Login</h3>
+
+<input type="text" id="empName" placeholder="Enter Employee Name">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+
+<!-- ORDER -->
+
+<div class="box" id="orderBox" style="display:none">
+
+<h3>Order Menu</h3>
+
+<div class="row">
+<label>Employee Meal ₹30</label>
+<input type="number" id="meal" class="qty" value="0">
+</div>
+
+<div class="row">
+<label>Tea ₹5</label>
+<input type="number" id="tea" class="qty" value="0">
+</div>
+
+<div class="row">
+<label>Other Meal ₹35</label>
+<input type="number" id="other" class="qty" value="0">
+</div>
+
+<button onclick="placeOrder()">Place Order</button>
+
+<div class="success" id="success"></div>
+<div class="token" id="token"></div>
+
+</div>
+
+<div class="footer">
+Created by Kishor N
+</div>
+
+
+<script>
+
+var employee="";
+
+function login(){
+
+employee=document.getElementById("empName").value;
+
+if(employee==""){
+alert("Enter employee name");
+return;
+}
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("orderBox").style.display="block";
+
+}
+
+function placeOrder(){
+
+var meal=document.getElementById("meal").value;
+var tea=document.getElementById("tea").value;
+var other=document.getElementById("other").value;
+
+if(meal==0 && tea==0 && other==0){
+alert("Please select items");
+return;
+}
+
+fetch("https://script.google.com/macros/s/AKfycbwqohruk7vVD2Fg7NOiOTshJdpNNjn4nRvgnMWWql-PqJZDRo5z3C3Xz-pJgCNnyTc9tg/exec",{
+
+method:"POST",
+
+body:JSON.stringify({
+
+name:employee,
+meal:meal,
+tea:tea,
+other:other,
+time:new Date().toLocaleString()
+
+})
+
+})
+
+.then(res=>res.json())
+.then(data=>{
+
+document.getElementById("success").innerHTML="✅ Order Placed Successfully";
+document.getElementById("token").innerHTML="Your Token Number : "+data.token;
+
+document.getElementById("meal").value=0;
+document.getElementById("tea").value=0;
+document.getElementById("other").value=0;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
