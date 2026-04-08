@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Canteen Admin Dashboard</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+background:#1e3c72;
+color:white;
+text-align:center;
+padding:30px;
+}
+
+.card{
+background:white;
+color:black;
+padding:20px;
+margin:15px;
+border-radius:12px;
+font-size:22px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>VIMUL Canteen Dashboard</h2>
+
+<div class="card" id="orders">Total Orders : 0</div>
+
+<div class="card" id="meals">Meals : 0</div>
+
+<div class="card" id="tea">Tea : 0</div>
+
+<div class="card" id="other">Other Meals : 0</div>
+
+
+<script>
+
+var scriptURL="https://script.google.com/macros/s/AKfycbwN5CLy0DzeIa_-ajKFkDjwFf5VIc0ajtLmAIGy--4mq44_NJTiCEX8X5vedDz8DW1exA/exec";
+
+function loadDashboard(){
+
+fetch(scriptURL,{
+method:"POST",
+body:JSON.stringify({
+action:"dashboard"
+})
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+document.getElementById("orders").innerHTML=
+"Total Orders : "+data.orders;
+
+document.getElementById("meals").innerHTML=
+"Meals : "+data.meals;
+
+document.getElementById("tea").innerHTML=
+"Tea : "+data.tea;
+
+document.getElementById("other").innerHTML=
+"Other Meals : "+data.other;
+
+});
+
+}
+
+loadDashboard();
+
+setInterval(loadDashboard,10000);
+
+</script>
+
+</body>
+
+</html>
